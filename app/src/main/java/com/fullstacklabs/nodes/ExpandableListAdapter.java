@@ -10,14 +10,14 @@ import android.widget.CheckedTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fullstacklabs.nodes.models.Nodes;
+import com.fullstacklabs.nodes.models.Node;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
-    private final SparseArray<Nodes> nodes;
+    private final SparseArray<Node> nodes;
     public LayoutInflater inflater;
     public Activity activity;
 
-    public ExpandableListAdapter(Activity act, SparseArray<Nodes> nodes) {
+    public ExpandableListAdapter(Activity act, SparseArray<Node> nodes) {
         activity = act;
         this.nodes = nodes;
         inflater = act.getLayoutInflater();
@@ -25,7 +25,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return nodes.get(groupPosition).children.get(childPosition);
+        return nodes.get(groupPosition).blocks.get(childPosition);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return nodes.get(groupPosition).children.size();
+        return nodes.get(groupPosition).blocks.size();
     }
 
     @Override
@@ -89,9 +89,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.list_view_row, null);
         }
-        Nodes nodes = (Nodes) getGroup(groupPosition);
-        ((CheckedTextView) convertView.findViewById(R.id.textView1)).setText(nodes.string);
-        ((CheckedTextView) convertView.findViewById(R.id.textView1)).setChecked(isExpanded);
+        Node nodes = (Node) getGroup(groupPosition);
+        ((CheckedTextView) convertView.findViewById(R.id.title_text_view)).setText(nodes.title);
+        ((CheckedTextView) convertView.findViewById(R.id.title_text_view)).setChecked(isExpanded);
+
+
+        ((TextView) convertView.findViewById(R.id.online_status)).setText(nodes.status);
+        ((TextView) convertView.findViewById(R.id.node_url)).setText(nodes.url);
+
         return convertView;
     }
 
