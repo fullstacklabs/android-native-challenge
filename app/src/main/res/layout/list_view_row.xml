@@ -10,10 +10,10 @@
             android:id="@+id/title_text_view"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:gravity="left"
+            android:gravity="start"
             android:paddingLeft="32dp"
             android:paddingTop="8dp"
-            android:text="Test"
+            android:text="@string/default_node_name"
             android:textSize="14sp"
             android:textStyle="bold"
             tools:layout_editor_absoluteX="16dp"
@@ -24,8 +24,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
+            android:paddingRight="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             tools:layout_editor_absoluteY="8dp">
+
+        <com.fullstacklabs.nodes.StatusView
+                android:id="@+id/circle_view"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_margin="4dp"/>
 
         <TextView
                 android:id="@+id/online_status"
@@ -33,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
-                android:text="ONLINE"
+                android:text="@string/offline_status"
                 android:textSize="14sp"
                 android:textStyle="bold"/>
 
@@ -46,7 +54,6 @@
             android:layout_marginTop="7dp"
             android:drawablePadding="5dp"
             android:gravity="center_vertical"
-            android:text="https://thawing-spring-23324.herokuapp.com"
             android:textSize="14sp"
             android:textStyle="bold"
             android:paddingBottom="8dp"

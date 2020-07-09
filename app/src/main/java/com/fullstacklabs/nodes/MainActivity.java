@@ -3,10 +3,8 @@ package com.fullstacklabs.nodes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
 import com.fullstacklabs.nodes.models.NodeResponse;
 import com.fullstacklabs.nodes.models.Node;
@@ -18,14 +16,14 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
-    private static String STATUS_ENDPOINT = "/api/v1/status";
-    String[] urls = new String[] {
+    String[] mNodeUrls = new String[] {
             "https://thawing-springs-53971.herokuapp.com",
             "https://secret-lowlands-62331.herokuapp.com",
             "https://calm-anchorage-82141.herokuapp.com",
             "http://localhost:3002",
     };
-    SparseArray<Node> nodes = new SparseArray<>();
+    SparseArray<Node> mNodes = new SparseArray<>();
+    ExpandableListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,71 +32,60 @@ public class MainActivity extends AppCompatActivity {
         createNodes();
         ExpandableListView listview = (ExpandableListView) findViewById(R.id.list_view);
 
-        ExpandableListAdapter adapter = new ExpandableListAdapter(this, nodes);
-        listview.setAdapter(adapter);
+        mAdapter = new ExpandableListAdapter(this, mNodes);
+        listview.setAdapter(mAdapter);
 
         getNodeStatus();
     }
 
     private void getNodeStatus() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://thawing-springs-53971.herokuapp.com/api/v1/status/")
+                .baseUrl(mNodeUrls[0]) // How to avoid setting unnecessary baseUrl
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         NodeService service = retrofit.create(NodeService.class);
 
-//        service.getNodeStatus("https://thawing-springs-53971.herokuapp.com/api/v1/status/").enqueue(new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-//                Log.i("Nodes", response.toString());
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                Log.e("Nodes", t.toString());
-//                Toast.makeText(MainActivity.this, t.toString(), Toast.LENGTH_LONG).show();
-//            }
-//        });
+        for(int i = 0; i < this.mNodes.size(); i++) {
+            int key = this.mNodes.keyAt(i);
+            Node node = this.mNodes.get(key);
 
-        for(int i = 0; i < this.nodes.size(); i++) {
-            int key = this.nodes.keyAt(i);
-            Node node = this.nodes.get(key);
-
-            service.getNodeStatus(node.url + STATUS_ENDPOINT).enqueue(new Callback<NodeResponse>() {
+            String GET_STATUS_ENDPOINT = "/api/v1/status";
+            service.getNodeStatus(node.getUrl() + GET_STATUS_ENDPOINT).enqueue(new Callback<NodeResponse>() {
                 @Override
                 public void onResponse(Call<NodeResponse> call, retrofit2.Response<NodeResponse> response) {
-                    Log.i("Nodes", "code: " + response.code());
-
                     if (response.isSuccessful()){
                         if (response.body() != null){
                             NodeResponse nodeResponse = response.body();
-                            Log.i("Nodes", nodeResponse.nodeName);
+
                             node.setTitle(nodeResponse.nodeName);
+                            node.setStatus(getString(R.string.online_status));
+                            mAdapter.notifyDataSetChanged();
                         }else{
-                            Log.i("Nodes", "Error: Returned empty response");//Toast.makeText(getContext(),"Nothing returned",Toast.LENGTH_LONG).show();
+                            node.setStatus(getString(R.string.offline_status));
+                            mAdapter.notifyDataSetChanged();
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Call<NodeResponse> call, Throwable t) {
-                    Log.e("Nodes", t.toString());
-                    Toast.makeText(MainActivity.this, t.toString(), Toast.LENGTH_LONG).show();
+                    node.setStatus(getString(R.string.offline_status));
+                    mAdapter.notifyDataSetChanged();
                 }
             });
         }
     }
 
     public void createNodes() {
-        int size = this.urls.length;
+        int size = this.mNodeUrls.length;
         for (int i = 0; i < size; i++) {
             String title = "Node " + i;
-            String url = this.urls[i];
-            Node node = new Node(title, url);
+            String url = this.mNodeUrls[i];
+            Node node = new Node(title, url, getString(R.string.offline_status));
 
             node.blocks.add("Blocks Go Here");
-            nodes.append(i, node);
+            mNodes.append(i, node);
         }
     }
 }

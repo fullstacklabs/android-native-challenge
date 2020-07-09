@@ -13,19 +13,19 @@ import android.widget.Toast;
 import com.fullstacklabs.nodes.models.Node;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
-    private final SparseArray<Node> nodes;
-    public LayoutInflater inflater;
-    public Activity activity;
+    private final SparseArray<Node> mNodes;
+    public LayoutInflater mInflater;
+    public Activity mActivity;
 
-    public ExpandableListAdapter(Activity act, SparseArray<Node> nodes) {
-        activity = act;
-        this.nodes = nodes;
-        inflater = act.getLayoutInflater();
+    public ExpandableListAdapter(Activity activity, SparseArray<Node> nodes) {
+        mActivity = activity;
+        this.mNodes = nodes;
+        mInflater = activity.getLayoutInflater();
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return nodes.get(groupPosition).blocks.get(childPosition);
+        return mNodes.get(groupPosition).blocks.get(childPosition);
     }
 
     @Override
@@ -39,33 +39,36 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         final String children = (String) getChild(groupPosition, childPosition);
         TextView text = null;
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.list_view_row_details, null);
+            convertView = mInflater.inflate(R.layout.list_view_row_details, null);
         }
-        text = (TextView) convertView.findViewById(R.id.textView1);
+
+        text = (TextView) convertView.findViewById(R.id.block_text_view);
         text.setText(children);
+
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(activity, children,
+                Toast.makeText(mActivity, children,
                         Toast.LENGTH_SHORT).show();
             }
         });
+
         return convertView;
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return nodes.get(groupPosition).blocks.size();
+        return mNodes.get(groupPosition).blocks.size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return nodes.get(groupPosition);
+        return mNodes.get(groupPosition);
     }
 
     @Override
     public int getGroupCount() {
-        return nodes.size();
+        return mNodes.size();
     }
 
     @Override
@@ -87,15 +90,26 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.list_view_row, null);
+            convertView = mInflater.inflate(R.layout.list_view_row, null);
         }
-        Node nodes = (Node) getGroup(groupPosition);
-        ((CheckedTextView) convertView.findViewById(R.id.title_text_view)).setText(nodes.title);
-        ((CheckedTextView) convertView.findViewById(R.id.title_text_view)).setChecked(isExpanded);
+        Node node = (Node) getGroup(groupPosition);
+
+        CheckedTextView checkTextView = (CheckedTextView) convertView.findViewById(R.id.title_text_view);
+        TextView statusTextView = (TextView) convertView.findViewById(R.id.online_status);
+        TextView nodeUrl = (TextView) convertView.findViewById(R.id.node_url);
+        StatusView statusView = (StatusView) convertView.findViewById(R.id.circle_view);
 
 
-        ((TextView) convertView.findViewById(R.id.online_status)).setText(nodes.status);
-        ((TextView) convertView.findViewById(R.id.node_url)).setText(nodes.url);
+        checkTextView.setText(node.getTitle());
+        checkTextView.setChecked(isExpanded);
+        statusTextView.setText(node.getStatus());
+        nodeUrl.setText(node.getUrl());
+
+        if (node.getStatus().equals(mActivity.getString(R.string.online_status))) {
+            statusView.setColor(StatusView.ONLINE_COLOR);
+        } else {
+            statusView.setColor(StatusView.OFFLINE_COLOR);
+        }
 
         return convertView;
     }
