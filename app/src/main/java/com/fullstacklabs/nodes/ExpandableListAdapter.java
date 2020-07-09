@@ -45,12 +45,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         text = (TextView) convertView.findViewById(R.id.block_text_view);
         text.setText(children);
 
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mActivity, children,
-                        Toast.LENGTH_SHORT).show();
-            }
+        convertView.setOnClickListener(v -> {
+            Toast.makeText(mActivity, children, Toast.LENGTH_SHORT).show();
         });
 
         return convertView;
