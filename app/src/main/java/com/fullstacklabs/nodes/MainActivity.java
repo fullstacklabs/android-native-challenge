@@ -60,11 +60,11 @@ public class MainActivity extends AppCompatActivity {
 
                             node.setTitle(nodeResponse.nodeName);
                             node.setStatus(getString(R.string.online_status));
-                            mAdapter.notifyDataSetChanged();
-                        }else{
+                        } else {
                             node.setStatus(getString(R.string.offline_status));
-                            mAdapter.notifyDataSetChanged();
                         }
+
+                        mAdapter.notifyDataSetChanged();
                     }
                 }
 
