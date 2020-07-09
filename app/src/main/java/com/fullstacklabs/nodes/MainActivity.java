@@ -1,10 +1,11 @@
 package com.fullstacklabs.nodes;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.SparseArray;
-import android.widget.ExpandableListView;
 
 import com.fullstacklabs.nodes.models.NodeResponse;
 import com.fullstacklabs.nodes.models.Node;
@@ -23,17 +24,20 @@ public class MainActivity extends AppCompatActivity {
             "http://localhost:3002",
     };
     SparseArray<Node> mNodes = new SparseArray<>();
-    ExpandableListAdapter mAdapter;
+    ExpandableRecyclerAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         createNodes();
-        ExpandableListView listview = (ExpandableListView) findViewById(R.id.list_view);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
 
-        mAdapter = new ExpandableListAdapter(this, mNodes);
-        listview.setAdapter(mAdapter);
+        mAdapter = new ExpandableRecyclerAdapter(mNodes);
+        recyclerView.setAdapter(mAdapter);
 
         getNodeStatus();
     }
@@ -51,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
             Node node = this.mNodes.get(key);
 
             String GET_STATUS_ENDPOINT = "/api/v1/status";
+            node.setStatus(getString(R.string.loading_status));
+            mAdapter.notifyDataSetChanged();
             service.getNodeStatus(node.getUrl() + GET_STATUS_ENDPOINT).enqueue(new Callback<NodeResponse>() {
                 @Override
                 public void onResponse(Call<NodeResponse> call, retrofit2.Response<NodeResponse> response) {
