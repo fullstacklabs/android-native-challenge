@@ -4,11 +4,27 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/gray"
         tools:context=".MainActivity">
 
-    <ExpandableListView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/list_view"
+    <TextView
+            android:id="@+id/node_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:text="@string/app_name"
+            android:textColor="@color/black"
+            android:paddingLeft="24dp"
+            android:paddingVertical="8dp"
+            android:textSize="28sp"
+            android:textStyle="bold"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/node_title"
+            tools:layout_editor_absoluteX="-52dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
