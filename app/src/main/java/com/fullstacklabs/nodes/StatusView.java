@@ -14,6 +14,7 @@ public class StatusView extends View {
 
     public static final String OFFLINE_COLOR = "#D94238";
     public static final String ONLINE_COLOR = "#1E9A57";
+    public static final String LOADING_COLOR = "#F4C20D";
     private Paint drawPaint;
     private       float size;
 
