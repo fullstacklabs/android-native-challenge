@@ -1,115 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/card_view"
-        android:layout_marginVertical="10dp"
-        android:layout_marginHorizontal="24dp"
-        card_view:cardElevation="6dp">
+        xmlns:card_view="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+                name="node"
+                type="com.fullstacklabs.nodes.models.Node" />
 
-    <LinearLayout
+        <variable
+                name="isExpanded"
+                type="Boolean" />
+
+        <variable
+                name="handlers"
+                type="com.fullstacklabs.nodes.ExpandableCardClickListener" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/card_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:orientation="vertical">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context=".MainActivity">
-
-            <TextView
-                    android:id="@+id/node_name_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:gravity="start"
-                    android:paddingLeft="6dp"
-                    android:paddingTop="8dp"
-                    android:text="@string/default_node_name"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    tools:layout_editor_absoluteX="16dp"
-                    tools:layout_editor_absoluteY="8dp" />
-
-            <LinearLayout
-                    android:id="@+id/online_status_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="8dp"
-                    android:paddingRight="32dp"
-                    card_view:layout_constraintEnd_toEndOf="parent"
-                    tools:layout_editor_absoluteY="8dp">
-
-                <com.fullstacklabs.nodes.StatusView
-                        android:id="@+id/circle_view"
-                        android:layout_width="5dp"
-                        android:layout_height="5dp"
-                        android:layout_marginTop="2dp"
-                        android:layout_margin="6dp"/>
-
-                <TextView
-                        android:id="@+id/online_status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="5dp"
-                        android:gravity="center_vertical"
-                        android:text="@string/offline_status"
-                        android:textColor="@color/black"
-                        android:textSize="10sp"/>
-            </LinearLayout>
-
-            <TextView
-                    android:id="@+id/node_url"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:drawablePadding="5dp"
-                    android:gravity="center_vertical"
-                    android:textSize="12sp"
-                    android:textStyle="normal"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="6dp"
-                    card_view:layout_constraintTop_toBottomOf="@+id/node_name_text_view"
-                    tools:layout_editor_absoluteX="16dp"/>
-
-            <View
-                    android:id="@+id/chevron_icon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_alignParentEnd="false"
-                    android:layout_alignParentRight="false"
-                    android:background="@drawable/collapsed_icon"
-                    card_view:layout_constraintEnd_toEndOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="24dp"
+            android:onClick="@{handlers::onCardClicked}"
+            card_view:cardElevation="6dp">
 
         <LinearLayout
-                android:id="@+id/expandable_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_margin="10dp"
+                android:orientation="vertical">
 
-            <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:orientation="vertical">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:context=".MainActivity">
 
                 <TextView
-                        android:id="@+id/blocks_default_text_view"
-                        android:textSize="16sp"
-                        android:textColor="@color/black"
-                        android:text="@string/default_blocks_goes_here"
+                        android:id="@+id/node_name_text_view"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="32dp"
+                        android:gravity="start"
+                        android:paddingLeft="6dp"
+                        android:paddingTop="8dp"
+                        android:text="@{node.title}"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        tools:layout_editor_absoluteX="16dp"
+                        tools:layout_editor_absoluteY="8dp" />
+
+                <LinearLayout
+                        android:id="@+id/online_status_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingRight="32dp"
+                        card_view:layout_constraintEnd_toEndOf="parent"
+                        tools:layout_editor_absoluteY="8dp">
+
+                    <com.fullstacklabs.nodes.StatusView
+                            android:id="@+id/circle_view"
+                            android:layout_width="5dp"
+                            android:layout_height="5dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_margin="6dp"/>
+
+                    <TextView
+                            android:id="@+id/online_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="5dp"
+                            android:gravity="center_vertical"
+                            android:text="@{node.status}"
+                            android:textColor="@color/black"
+                            android:textSize="10sp"/>
+                </LinearLayout>
+
+                <TextView
+                        android:id="@+id/node_url"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{node.url}"
+                        android:layout_marginTop="7dp"
+                        android:drawablePadding="5dp"
+                        android:gravity="center_vertical"
+                        android:textSize="12sp"
+                        android:textStyle="normal"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="6dp"
+                        card_view:layout_constraintTop_toBottomOf="@+id/node_name_text_view"
+                        tools:layout_editor_absoluteX="16dp"/>
+
+                <View
+                        android:id="@+id/chevron_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentEnd="false"
+                        android:layout_alignParentRight="false"
+                        android:background="@drawable/collapsed_icon"
+                        card_view:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                    android:id="@+id/expandable_layout"
+                    android:visibility="@{isExpanded ? View.VISIBLE : View.GONE}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:orientation="vertical">
+
+                    <TextView
+                            android:id="@+id/blocks_default_text_view"
+                            android:textSize="16sp"
+                            android:textColor="@color/black"
+                            android:text="@string/default_blocks_goes_here"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+</layout>
