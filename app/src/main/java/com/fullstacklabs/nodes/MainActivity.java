@@ -1,12 +1,14 @@
 package com.fullstacklabs.nodes;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.SparseArray;
 
+import com.fullstacklabs.nodes.databinding.ActivityMainBinding;
 import com.fullstacklabs.nodes.models.NodeResponse;
 import com.fullstacklabs.nodes.models.Node;
 import com.fullstacklabs.nodes.network.NodeService;
@@ -25,11 +27,13 @@ public class MainActivity extends AppCompatActivity {
     };
     SparseArray<Node> mNodes = new SparseArray<>();
     ExpandableRecyclerAdapter mAdapter;
+    private ActivityMainBinding mBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
         createNodes();
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);

@@ -9,6 +9,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    buildFeatures {
+        dataBinding true
+    }
+
     defaultConfig {
         applicationId "com.fullstacklabs.nodes"
         minSdkVersion 26
