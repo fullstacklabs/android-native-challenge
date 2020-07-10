@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
     public void createNodes() {
         int size = this.mNodeUrls.length;
         for (int i = 0; i < size; i++) {
-            String title = "Node " + i;
+            String title = "Node " + (i + 1);
             String url = this.mNodeUrls[i];
             Node node = new Node(title, url, getString(R.string.offline_status));
 
