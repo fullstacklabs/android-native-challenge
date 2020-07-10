@@ -94,13 +94,15 @@
                         tools:layout_editor_absoluteX="16dp"/>
 
                 <View
-                        android:id="@+id/chevron_icon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_alignParentEnd="false"
-                        android:layout_alignParentRight="false"
-                        android:background="@drawable/collapsed_icon"
-                        card_view:layout_constraintEnd_toEndOf="parent" />
+                    android:id="@+id/chevron_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="false"
+                    android:layout_alignParentRight="false"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/collapsed_icon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    card_view:layout_constraintEnd_toEndOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
